@@ -18,16 +18,17 @@ steps:
 - task: TerraformInstaller@0
   inputs:
     terraformVersion: '0.12.3'
-
 - task: TerraformTaskV2@2
   inputs:
     provider: 'azurerm'
     command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
     backendServiceArm: 'Microsoft Partner Network (55cf0ba9-e3c1-4ced-b5e9-5abb7b4d39b1)'
     backendAzureRmResourceGroupName: 'Team_AWS'
     backendAzureRmStorageAccountName: 'terraformstateskip'
     backendAzureRmContainerName: 'tfstatefile'
     backendAzureRmKey: 'tfstatefile'
+
 - task: TerraformTaskV2@2
   inputs:
     provider: 'azurerm'
