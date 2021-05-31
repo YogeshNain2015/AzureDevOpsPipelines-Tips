@@ -36,22 +36,3 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
     environmentServiceNameAzureRM: 'Microsoft Partner Network (55cf0ba9-e3c1-4ced-b5e9-5abb7b4d39b1)'
 
-- task: PowerShell@2
-  displayName: detect any terraform change
-  inputs:
-    workingDirectory: '$(System.DefaultWorkingDirectory)/skip-step'
-    targetType: 'inline'
-    script: |
-      # Write-Host "LASTEXITCODE : $LASTEXITCODE"
-      $plan = $(terraform show -json tfplan | ConvertFrom-Json)
-      $actions = $plan.resource_changes.change.actions
-      Write-Host "Terraform actions : $actions"
-      if (($actions -contains 'create') -or ($actions -contains 'delete') -or ($actions -contains 'update'))
-      {
-        Write-Host "Terraform will perform the following actions : $actions"
-        Write-Host "##vso[task.setvariable variable=anyTfChanges;]true"
-      }
-      else
-      {
-        Write-Host "There is no change detected in Terraform tfplan file"
-      }
